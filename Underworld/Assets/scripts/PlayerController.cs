@@ -12,18 +12,22 @@ public class PlayerController : MonoBehaviour {
 	bool facingRight = true;
 
 	bool grounded=false;
-	public Transform groundCheck;
+	[SerializeField]
+	private Transform groundCheck;
 	float groundRadius=0.2f;
 	public LayerMask whatIsGround;
 
 	void Start () {
 		player = GetComponent<Rigidbody2D> ();
+
 		//anim = GetComponents<Animator> ();
 	}
 	
 
 	void FixedUpdate () {
-		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
+		
+		grounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
+
 		//anim.setBool ("Ground,grounded");
 		//anim.setFloat("vSpeed",rigidbody2D.velocity.y);
 		float move = Input.GetAxis ("Horizontal");
