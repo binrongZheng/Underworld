@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 	void OnTriggerEnter2D(Collider2D other){
-		if(other.tag=="Water"||other.tag=="FallCollider"){
+		if(other.tag=="Water"||other.tag=="FallCollider"||other.tag=="Pincho"){
 			transform.position=respawnPoint;
 			print(transform.position.x);
 		}

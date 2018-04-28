@@ -8,6 +8,7 @@ TagManager:
   - CheckPoint
   - Water
   - FallCollider
+  - Pincho
   layers:
   - Default
   - TransparentFX
