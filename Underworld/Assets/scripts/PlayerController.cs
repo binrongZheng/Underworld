@@ -9,18 +9,20 @@ public class PlayerController : MonoBehaviour {
 
 	public float maxSpeed = 10f;
 	public float jumpForce= 10f;
-	bool facingRight = true;
 
+	bool facingRight = true;
 	bool grounded=false;
 	[SerializeField]
 	private Transform groundCheck;
 	float groundRadius=0.2f;
 	public LayerMask whatIsGround;
 
+	public Vector3 respawnPoint;
+
 	void Start () {
 		player = GetComponent<Rigidbody2D> ();
 
-		//anim = GetComponents<Animator> ();
+		respawnPoint=transform.position;
 	}
 	
 
@@ -53,5 +55,15 @@ public class PlayerController : MonoBehaviour {
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+	}
+	void OnTriggerEnter2D(Collider2D other){
+		if(other.tag=="Water"||other.tag=="FallCollider"){
+			transform.position=respawnPoint;
+			print(transform.position.x);
+		}
+		if(other.tag=="CheckPoint"){
+			respawnPoint=other.transform.position;
+		}
+
 	}
 }
