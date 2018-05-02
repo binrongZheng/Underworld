@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 	private Rigidbody2D player;
 	//private Animator anim;
+	//[SerializeField]
+	public GameObject[] palas;
 
 	public float maxSpeed = 10f;
 	public float jumpForce= 10f;
@@ -19,6 +21,8 @@ public class PlayerController : MonoBehaviour {
 
 	public Vector3 respawnPoint;
 
+	private bool palaControl=false;
+	private bool playerMovePont=false;
 	void Start () {
 		player = GetComponent<Rigidbody2D> ();
 
@@ -49,6 +53,30 @@ public class PlayerController : MonoBehaviour {
 			//anim.SetBool("Ground",false);
 			player.AddForce(new Vector2(0,jumpForce));
 		}
+		if (palaControl && Input.GetKeyDown (KeyCode.LeftControl)) {
+			for(int i=0;i<palas.Length;i++){
+				if(palas[i].GetComponentInChildren<CheckController>().checkCtrl==true)
+					palas[i].GetComponentInChildren<CheckController>().checkCtrl=false;
+				else
+					palas[i].GetComponentInChildren<CheckController>().checkCtrl=true;
+			}
+		}
+		if(playerMovePont){
+			
+			for(int i=0;i<palas.Length;i++){
+				if(palas[i].GetComponentInChildren<CheckController>().checkCtrl==true){
+					if(palas[i].GetComponentInChildren<CheckController>().moving==true){
+						
+						player.AddForce(new Vector2(30,0));
+					}
+				}
+				else{
+					if(palas[i].GetComponentInChildren<CheckController>().moving==true){
+						player.AddForce(new Vector2(-30,0));
+					}
+				}
+			}
+		}
 	}
 	void Flip(){
 		facingRight = !facingRight;
@@ -59,11 +87,29 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag=="Water"||other.tag=="FallCollider"||other.tag=="Pincho"){
 			transform.position=respawnPoint;
-			print(transform.position.x);
 		}
+		if(other.tag=="MovePlatform"){
+			respawnPoint=other.transform.position;
+		}
+
 		if(other.tag=="CheckPoint"){
 			respawnPoint=other.transform.position;
 		}
 
+		if(other.tag=="Pala"){
+			palaControl=true;
+		}
+		if(other.tag=="MovePlatform"){
+			playerMovePont=true;
+		}
+
+	}
+	void OnTriggerExit2D(Collider2D other){
+		if(other.tag=="Pala"){
+			palaControl=false;
+		}
+		if(other.tag=="MovePlatform"){
+			playerMovePont=false;
+		}
 	}
 }

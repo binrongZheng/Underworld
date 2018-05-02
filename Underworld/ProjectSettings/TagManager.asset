@@ -9,6 +9,9 @@ TagManager:
   - Water
   - FallCollider
   - Pincho
+  - Pala
+  - MovePlatform
+  - BreakBridge
   layers:
   - Default
   - TransparentFX
