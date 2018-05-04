@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
 	//[SerializeField]
 	public GameObject[] palas;
 
-	public float maxSpeed = 10f;
+	public float maxSpeed = 20f;
 	public float jumpForce= 10f;
 
 	bool facingRight = true;
@@ -17,14 +17,20 @@ public class PlayerController : MonoBehaviour {
 	bool LliscaGrounded=false;
 	[SerializeField]
 	private Transform groundCheck;
+	[SerializeField]
+	private Transform headCheck;
 	float groundRadius=0.2f;
 	public LayerMask whatIsGround;
 	public LayerMask whatLliscaGround;
+	public LayerMask whatIsTouch;
 
 	public Vector3 respawnPoint;
 
 	private bool palaControl=false;
 	private bool playerMovePont=false;
+	private bool llisca=false;
+	private bool die=false;
+
 	void Start () {
 		player = GetComponent<Rigidbody2D> ();
 
@@ -35,26 +41,45 @@ public class PlayerController : MonoBehaviour {
 	void FixedUpdate () {
 		
 		grounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
-		LliscaGrounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatLliscaGround);
+		LliscaGrounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius+0.2f, whatLliscaGround);
+		die=Physics2D.OverlapCircle (headCheck.position, groundRadius, whatIsTouch);
 
 		//anim.setBool ("Ground,grounded");
 		//anim.setFloat("vSpeed",rigidbody2D.velocity.y);
-		float move = Input.GetAxis ("Horizontal");
+
 
 		//anim.SetFloat ("Speed", Mathf.Abs (move));
 
-		player.velocity = new Vector2 (move*maxSpeed,player.velocity.y);
+		if (grounded)
+			llisca = false;
+		if (!llisca) {
+			float move = Input.GetAxis ("Horizontal");
+			player.velocity = new Vector2 (move*maxSpeed,player.velocity.y);
 
-		if (move > 0 && !facingRight)
-			Flip ();
-		else if (move < 0 && facingRight)
-			Flip ();
+			if (move > 0 && !facingRight)
+				Flip ();
+			else if (move < 0 && facingRight)
+				Flip ();
+		}
 	}
 
 	void Update(){
+		if (die) {
+			transform.position=respawnPoint;
+			die = false;
+		}
 		if (LliscaGrounded) {
+			
+			llisca = true;
 			//anim.SetBool("Ground",false);
-			player.velocity = new Vector2 (jumpForce,0);
+
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				player.AddForce (new Vector2 (0, jumpForce));
+			} 
+			else {
+				player.AddForce(new Vector2(1,0));
+			}
+			//player.velocity = new Vector2 (jumpForce,-0.75f);
 			//player.AddForce(new Vector2(jumpForce,0));
 		}
 		if (grounded && Input.GetKeyDown (KeyCode.Space)) {
