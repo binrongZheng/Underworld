@@ -14,10 +14,12 @@ public class PlayerController : MonoBehaviour {
 
 	bool facingRight = true;
 	bool grounded=false;
+	bool LliscaGrounded=false;
 	[SerializeField]
 	private Transform groundCheck;
 	float groundRadius=0.2f;
 	public LayerMask whatIsGround;
+	public LayerMask whatLliscaGround;
 
 	public Vector3 respawnPoint;
 
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour {
 	void FixedUpdate () {
 		
 		grounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
+		LliscaGrounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatLliscaGround);
 
 		//anim.setBool ("Ground,grounded");
 		//anim.setFloat("vSpeed",rigidbody2D.velocity.y);
@@ -49,6 +52,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update(){
+		if (LliscaGrounded) {
+			//anim.SetBool("Ground",false);
+			player.velocity = new Vector2 (jumpForce,0);
+			//player.AddForce(new Vector2(jumpForce,0));
+		}
 		if (grounded && Input.GetKeyDown (KeyCode.Space)) {
 			//anim.SetBool("Ground",false);
 			player.AddForce(new Vector2(0,jumpForce));
