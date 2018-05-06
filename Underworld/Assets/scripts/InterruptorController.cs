@@ -1,0 +1,126 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class InterruptorController : MonoBehaviour {
+	//public Transform pont;
+	public Transform[] controlObject;
+	public bool directionX;
+	public float[] controlDist;
+
+	public Transform player;
+	private bool fall;
+	private Vector3 fallPos;
+	private float upPos;
+	private float[] ControlPos;
+	private float initControlPos;
+	private bool passed=false;
+	// Use this for initialization
+	void Start () {
+		upPos = transform.position.y;
+		ControlPos=new float[controlObject.Length];
+		if(directionX){
+			for(int i=0;i<controlObject.Length;i++){
+				ControlPos[i]=controlObject[i].position.x;
+			}
+		}
+		else{
+			for(int i=0;i<controlObject.Length;i++){
+				ControlPos[i]=controlObject[i].position.y;
+				initControlPos=controlObject[i].position.x;
+			}
+		}
+	}
+
+	// Update is called once per frame
+	void Update () {
+		for(int i=0;i<controlObject.Length;i++){
+			if(directionX){
+				if (player.position.x>ControlPos[i])
+					passed=true;
+			}
+			else{
+				if (player.position.x>initControlPos)
+					passed=true;
+			}
+		}
+		if (directionX){
+			if(fall&&!passed){
+				for(int i=0;i<controlObject.Length;i++){
+					if(controlDist[i]<0){
+						if(controlObject[i].position.x>ControlPos[i]+controlDist[i])
+							controlObject[i].Translate(-0.05f,0,0);
+					}
+					else{
+						if(controlObject[i].position.x<ControlPos[i]+controlDist[i])
+							controlObject[i].Translate(0.05f,0,0);
+					}
+					if(transform.position.y>upPos-0.20f)
+						transform.Translate(0,-0.01f,0);
+				}
+			}
+			else{
+				for(int i=0;i<controlObject.Length;i++){
+					if(controlDist[i]<0){
+						if(controlObject[i].position.x<ControlPos[i])
+							controlObject[i].Translate(0.05f,0,0);
+					}
+					else{
+						if(controlObject[i].position.x>ControlPos[i])
+							controlObject[i].Translate(-0.05f,0,0);
+					}
+					if(transform.position.y<upPos)
+						transform.Translate(0,0.01f,0);
+				}
+			}
+		}
+		else{
+			if(fall&&!passed){
+				for(int i=0;i<controlObject.Length;i++){
+					if(controlDist[i]<0){
+						if(controlObject[i].position.y>ControlPos[i]+controlDist[i]){
+							
+							controlObject[i].Translate(0,-0.05f,0);
+						}
+					}
+					else{
+						if(controlObject[i].position.y<ControlPos[i]+controlDist[i]){
+							
+							controlObject[i].Translate(0,0.05f,0);
+						}
+					}
+					//button move
+					if(transform.position.y>upPos-0.20f)
+						transform.Translate(0,-0.01f,0);
+				}
+			}
+			else{
+				for(int i=0;i<controlObject.Length;i++){
+					if(controlDist[i]<0){
+						if(controlObject[i].position.y<ControlPos[i])
+							controlObject[i].Translate(0,0.05f,0);
+					}
+					else{
+						if(controlObject[i].position.y>ControlPos[i])
+							controlObject[i].Translate(0,-0.05f,0);
+					}
+					//button move
+					if(transform.position.y<upPos)
+						transform.Translate(0,0.01f,0);
+				}
+			}
+
+		}
+	}
+	void OnTriggerEnter2D(Collider2D other){
+		if(other.tag=="Player"||other.tag=="Box"){
+			fall=true;
+			fallPos=transform.position;
+		}
+	}
+	void OnTriggerExit2D(Collider2D other){
+		if(other.tag=="Player"||other.tag=="Box"){//&&other.tag=="Box"){
+			fall=false;
+		}
+	}
+}

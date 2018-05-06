@@ -8,12 +8,15 @@ public class PlayerController : MonoBehaviour {
 	//private Animator anim;
 	//[SerializeField]
 	public GameObject[] palas;
+	public Transform LadderCenter;
 
 	public float maxSpeed = 20f;
 	public float jumpForce= 10f;
 
 	bool facingRight = true;
 	bool grounded=false;
+	bool breakGrounded=false;
+
 	bool LliscaGrounded=false;
 	[SerializeField]
 	private Transform groundCheck;
@@ -21,6 +24,7 @@ public class PlayerController : MonoBehaviour {
 	private Transform headCheck;
 	float groundRadius=0.2f;
 	public LayerMask whatIsGround;
+	public LayerMask whatIsBGround;
 	public LayerMask whatLliscaGround;
 	public LayerMask whatIsTouch;
 
@@ -30,6 +34,7 @@ public class PlayerController : MonoBehaviour {
 	private bool playerMovePont=false;
 	private bool llisca=false;
 	private bool die=false;
+	private bool ladder=false;
 
 	void Start () {
 		player = GetComponent<Rigidbody2D> ();
@@ -41,6 +46,7 @@ public class PlayerController : MonoBehaviour {
 	void FixedUpdate () {
 		
 		grounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
+		breakGrounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsBGround);
 		LliscaGrounded=Physics2D.OverlapCircle (groundCheck.position, groundRadius+0.2f, whatLliscaGround);
 		die=Physics2D.OverlapCircle (headCheck.position, groundRadius, whatIsTouch);
 
@@ -49,8 +55,15 @@ public class PlayerController : MonoBehaviour {
 
 
 		//anim.SetFloat ("Speed", Mathf.Abs (move));
-
-		if (grounded)
+		if(ladder){
+			player.isKinematic=true;
+			float move =Input.GetAxis("Vertical");
+			player.velocity = new Vector2 (player.velocity.x,move*maxSpeed);
+		}
+		else{
+			player.isKinematic=false;
+		}
+		if (grounded||breakGrounded)
 			llisca = false;
 		if (!llisca) {
 			float move = Input.GetAxis ("Horizontal");
@@ -82,7 +95,7 @@ public class PlayerController : MonoBehaviour {
 			//player.velocity = new Vector2 (jumpForce,-0.75f);
 			//player.AddForce(new Vector2(jumpForce,0));
 		}
-		if (grounded && Input.GetKeyDown (KeyCode.Space)) {
+		if (grounded && Input.GetKeyDown (KeyCode.Space)||breakGrounded && Input.GetKeyDown (KeyCode.Space)) {
 			//anim.SetBool("Ground",false);
 			player.AddForce(new Vector2(0,jumpForce));
 		}
@@ -135,6 +148,10 @@ public class PlayerController : MonoBehaviour {
 		if(other.tag=="MovePlatform"){
 			playerMovePont=true;
 		}
+		if(other.tag=="Ladder"){
+			ladder=true;
+			transform.position=new Vector3(LadderCenter.position.x,transform.position.y,0);
+		}
 
 	}
 	void OnTriggerExit2D(Collider2D other){
@@ -143,6 +160,9 @@ public class PlayerController : MonoBehaviour {
 		}
 		if(other.tag=="MovePlatform"){
 			playerMovePont=false;
+		}
+		if(other.tag=="Ladder"){
+			ladder=false;
 		}
 	}
 }

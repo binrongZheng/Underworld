@@ -12,6 +12,8 @@ TagManager:
   - Pala
   - MovePlatform
   - BreakBridge
+  - Box
+  - Ladder
   layers:
   - Default
   - TransparentFX
