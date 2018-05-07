@@ -7,6 +7,8 @@ public class InterruptorController : MonoBehaviour {
 	public Transform[] controlObject;
 	public bool directionX;
 	public float[] controlDist;
+	public bool needPassedPoint;
+	public float moveVelocity;
 
 	public Transform player;
 	private bool fall;
@@ -34,6 +36,8 @@ public class InterruptorController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(!needPassedPoint) passed=false;
+
 		for(int i=0;i<controlObject.Length;i++){
 			if(directionX){
 				if (player.position.x>ControlPos[i])
@@ -49,11 +53,11 @@ public class InterruptorController : MonoBehaviour {
 				for(int i=0;i<controlObject.Length;i++){
 					if(controlDist[i]<0){
 						if(controlObject[i].position.x>ControlPos[i]+controlDist[i])
-							controlObject[i].Translate(-0.05f,0,0);
+							controlObject[i].Translate(-moveVelocity,0,0);
 					}
 					else{
 						if(controlObject[i].position.x<ControlPos[i]+controlDist[i])
-							controlObject[i].Translate(0.05f,0,0);
+							controlObject[i].Translate(moveVelocity,0,0);
 					}
 					if(transform.position.y>upPos-0.20f)
 						transform.Translate(0,-0.01f,0);
@@ -63,11 +67,11 @@ public class InterruptorController : MonoBehaviour {
 				for(int i=0;i<controlObject.Length;i++){
 					if(controlDist[i]<0){
 						if(controlObject[i].position.x<ControlPos[i])
-							controlObject[i].Translate(0.05f,0,0);
+							controlObject[i].Translate(moveVelocity,0,0);
 					}
 					else{
 						if(controlObject[i].position.x>ControlPos[i])
-							controlObject[i].Translate(-0.05f,0,0);
+							controlObject[i].Translate(-moveVelocity,0,0);
 					}
 					if(transform.position.y<upPos)
 						transform.Translate(0,0.01f,0);
@@ -80,13 +84,13 @@ public class InterruptorController : MonoBehaviour {
 					if(controlDist[i]<0){
 						if(controlObject[i].position.y>ControlPos[i]+controlDist[i]){
 							
-							controlObject[i].Translate(0,-0.05f,0);
+							controlObject[i].Translate(0,-moveVelocity,0);
 						}
 					}
 					else{
 						if(controlObject[i].position.y<ControlPos[i]+controlDist[i]){
 							
-							controlObject[i].Translate(0,0.05f,0);
+							controlObject[i].Translate(0,moveVelocity,0);
 						}
 					}
 					//button move
@@ -98,11 +102,11 @@ public class InterruptorController : MonoBehaviour {
 				for(int i=0;i<controlObject.Length;i++){
 					if(controlDist[i]<0){
 						if(controlObject[i].position.y<ControlPos[i])
-							controlObject[i].Translate(0,0.05f,0);
+							controlObject[i].Translate(0,moveVelocity,0);
 					}
 					else{
 						if(controlObject[i].position.y>ControlPos[i])
-							controlObject[i].Translate(0,-0.05f,0);
+							controlObject[i].Translate(0,-moveVelocity,0);
 					}
 					//button move
 					if(transform.position.y<upPos)

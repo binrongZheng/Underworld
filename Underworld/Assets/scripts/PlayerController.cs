@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour {
 	private bool palaControl=false;
 	private bool playerMovePont=false;
 	private bool llisca=false;
-	private bool die=false;
+	public bool die=false;
 	private bool ladder=false;
 
 	void Start () {
@@ -131,8 +131,9 @@ public class PlayerController : MonoBehaviour {
 		transform.localScale = theScale;
 	}
 	void OnTriggerEnter2D(Collider2D other){
-		if(other.tag=="Water"||other.tag=="FallCollider"||other.tag=="Pincho"){
+		if(other.tag=="Water"||other.tag=="FallCollider"||other.tag=="Pincho"||other.tag=="FallPincho"||other.tag=="Enemy"){
 			transform.position=respawnPoint;
+			die=true;
 		}
 		if(other.tag=="MovePlatform"){
 			respawnPoint=other.transform.position;
