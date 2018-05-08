@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InterruptorController : MonoBehaviour {
-	public bool canUse=true;
+	
 	public Transform[] controlObject;
 	public bool directionX;
 	public float[] controlDist;
@@ -54,7 +54,7 @@ public class InterruptorController : MonoBehaviour {
 			if (directionX){
 				if(fall&&!passed){
 					for(int i=0;i<controlObject.Length;i++){
-					if(canUse){
+					
 						if(controlDist[i]<0){
 							if(controlObject[i].position.x>ControlPos[i]+controlDist[i])
 								controlObject[i].Translate(-moveVelocity,0,0);
@@ -63,7 +63,7 @@ public class InterruptorController : MonoBehaviour {
 							if(controlObject[i].position.x<ControlPos[i]+controlDist[i])
 								controlObject[i].Translate(moveVelocity,0,0);
 						}
-					}
+
 					//interruptor movement
 						if(transform.position.y>upPos-0.20f)
 							transform.Translate(0,-0.01f,0);
@@ -71,7 +71,7 @@ public class InterruptorController : MonoBehaviour {
 				}
 				else{
 					for(int i=0;i<controlObject.Length;i++){
-					if(canUse){
+					
 						if(controlDist[i]<0){
 							if(controlObject[i].position.x<ControlPos[i])
 								controlObject[i].Translate(moveVelocity,0,0);
@@ -80,7 +80,7 @@ public class InterruptorController : MonoBehaviour {
 							if(controlObject[i].position.x>ControlPos[i])
 								controlObject[i].Translate(-moveVelocity,0,0);
 						}
-					}
+
 						if(transform.position.y<upPos)
 							transform.Translate(0,0.01f,0);
 					}
@@ -90,7 +90,7 @@ public class InterruptorController : MonoBehaviour {
 				if(fall&&!passed){
 					for(int i=0;i<controlObject.Length;i++){
 
-					if(canUse){
+
 						if(controlDist[i]<0){
 							if(controlObject[i].position.y>ControlPos[i]+controlDist[i]){
 								
@@ -103,7 +103,7 @@ public class InterruptorController : MonoBehaviour {
 								controlObject[i].Translate(0,moveVelocity,0);
 							}
 						}
-					}
+
 						//button move
 						if(transform.position.y>upPos-0.20f)
 							transform.Translate(0,-0.01f,0);
@@ -111,7 +111,7 @@ public class InterruptorController : MonoBehaviour {
 				}
 				else{
 					for(int i=0;i<controlObject.Length;i++){
-					if(canUse){
+					
 						if(controlDist[i]<0){
 							if(controlObject[i].position.y<ControlPos[i])
 								controlObject[i].Translate(0,moveVelocity,0);
@@ -120,7 +120,7 @@ public class InterruptorController : MonoBehaviour {
 							if(controlObject[i].position.y>ControlPos[i])
 								controlObject[i].Translate(0,-moveVelocity,0);
 						}
-					}
+
 						//button move
 						if(transform.position.y<upPos)
 							transform.Translate(0,0.01f,0);
