@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AscensorController : MonoBehaviour {
+
 	public bool checkCtrl;
 	public Transform briedge;
 	public float moveDistance;
@@ -20,6 +21,8 @@ public class AscensorController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
+
 		if(checkCtrl){
 			if((transform.eulerAngles.z<=36)||(transform.eulerAngles.z>=324)){
 				transform.Rotate(Vector3.back);

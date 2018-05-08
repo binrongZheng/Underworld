@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpiderController : MonoBehaviour {
 	public Transform Player;
 	public GameObject[] Pinchos;
-	public GameObject[] Interruptor;
 
 	public float velocity;
 
@@ -14,6 +13,7 @@ public class SpiderController : MonoBehaviour {
 	private float distance;
 	private bool follow=false;
 	private bool passed=false;
+	private float dist;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +23,11 @@ public class SpiderController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		dist=transform.position.x-Player.transform.position.x;
+		if(dist<15&&!passed){
+			follow=true;
+		}
+
 		if(!passed && Player.GetComponent<PlayerController>().die){
 			transform.position=replace;
 			follow=false;
@@ -46,6 +51,12 @@ public class SpiderController : MonoBehaviour {
 		}
 	}
 	void OnTriggerEnter2D(Collider2D other){
+		if(other.tag=="Player"){
+			if(!passed){
+				follow=false;
+				transform.position=replace;
+			}
+		}
 		if(other.tag=="FallPincho"){
 			for(int i=0;i<Pinchos.Length;i++){
 				Pinchos[i].GetComponent<BoxCollider2D>().enabled=false;
@@ -57,16 +68,8 @@ public class SpiderController : MonoBehaviour {
 			passed=true;
 		}
 		if(other.tag=="Interruptor"){
-			for(int i=0;i<Interruptor.Length;i++){
-				Interruptor[i].GetComponent<BoxCollider2D>().enabled=false;
-			}
+			transform.Translate(0,0.4f,0);
 		}
 	}
-	void OnTriggerExit2D(Collider2D other){
-		if(other.tag=="Interruptor"){
-			for(int i=0;i<Interruptor.Length;i++){
-				Interruptor[i].GetComponent<BoxCollider2D>().enabled=true;
-			}
-		}
-	}
+
 }

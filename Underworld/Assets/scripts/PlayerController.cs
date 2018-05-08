@@ -101,10 +101,13 @@ public class PlayerController : MonoBehaviour {
 		}
 		if (palaControl && Input.GetKeyDown (KeyCode.LeftControl)) {
 			for(int i=0;i<palas.Length;i++){
-				if(palas[i].GetComponentInChildren<CheckController>().checkCtrl==true)
-					palas[i].GetComponentInChildren<CheckController>().checkCtrl=false;
-				else
-					palas[i].GetComponentInChildren<CheckController>().checkCtrl=true;
+				//assegurar que esta dentro del area
+				if(transform.position.x-palas[i].transform.position.x>-10&&transform.position.x-palas[i].transform.position.x<10){
+					if(palas[i].GetComponentInChildren<CheckController>().checkCtrl==true)
+						palas[i].GetComponentInChildren<CheckController>().checkCtrl=false;
+					else
+						palas[i].GetComponentInChildren<CheckController>().checkCtrl=true;
+				}
 			}
 		}
 		if(playerMovePont){
@@ -132,11 +135,11 @@ public class PlayerController : MonoBehaviour {
 	}
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag=="Water"||other.tag=="FallCollider"||other.tag=="Pincho"||other.tag=="FallPincho"||other.tag=="Enemy"){
-			transform.position=respawnPoint;
 			die=true;
+			transform.position=respawnPoint;
 		}
 		if(other.tag=="MovePlatform"){
-			respawnPoint=other.transform.position;
+			//respawnPoint=other.transform.position;
 		}
 
 		if(other.tag=="CheckPoint"){

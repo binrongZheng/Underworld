@@ -14,8 +14,9 @@ public class DieReplace : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		dist=player.transform.position.x-transform.position.x;
-		if(dist>-80&&dist<80){
+		if(dist>-10&&dist<10){
 			if(player.GetComponent<PlayerController>().die){
+				print("hola");
 				transform.position=iniPos;
 			}
 		}
