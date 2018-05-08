@@ -24,7 +24,7 @@ public class SpiderController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		dist=transform.position.x-Player.transform.position.x;
-		if(dist<15&&!passed){
+		if(dist<15&&dist>-15&&!passed){
 			follow=true;
 		}
 

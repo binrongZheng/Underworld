@@ -4,6 +4,7 @@ using UnityEngine;
 //
 //
 public class PlayerController : MonoBehaviour {
+	public GameObject interruptorAscensor;
 	private Rigidbody2D player;
 	//private Animator anim;
 	//[SerializeField]
@@ -35,7 +36,7 @@ public class PlayerController : MonoBehaviour {
 	private bool llisca=false;
 	public bool die=false;
 	private bool ladder=false;
-
+	private bool fallWater=false;
 	void Start () {
 		player = GetComponent<Rigidbody2D> ();
 
@@ -77,6 +78,9 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update(){
+		if(fallWater){
+			
+		}
 		if (die) {
 			transform.position=respawnPoint;
 			die = false;
@@ -102,9 +106,17 @@ public class PlayerController : MonoBehaviour {
 		if (palaControl && Input.GetKeyDown (KeyCode.LeftControl)) {
 			for(int i=0;i<palas.Length;i++){
 				//assegurar que esta dentro del area
-				if(transform.position.x-palas[i].transform.position.x>-10&&transform.position.x-palas[i].transform.position.x<10){
-					if(palas[i].GetComponentInChildren<CheckController>().checkCtrl==true)
-						palas[i].GetComponentInChildren<CheckController>().checkCtrl=false;
+				if(i==3){
+					if(interruptorAscensor.GetComponent<InterruptorController>().needPassedPoint){
+						interruptorAscensor.GetComponent<InterruptorController>().needPassedPoint=false;
+					}
+					else{
+						interruptorAscensor.GetComponent<InterruptorController>().needPassedPoint=true;
+					}
+				}
+				if (transform.position.x-palas[i].transform.position.x>-10&&transform.position.x-palas[i].transform.position.x<10){
+					if(palas[i].GetComponentInChildren<CheckController>().checkCtrl==true){
+						palas[i].GetComponentInChildren<CheckController>().checkCtrl=false;}
 					else
 						palas[i].GetComponentInChildren<CheckController>().checkCtrl=true;
 				}
@@ -113,15 +125,17 @@ public class PlayerController : MonoBehaviour {
 		if(playerMovePont){
 			
 			for(int i=0;i<palas.Length;i++){
-				if(palas[i].GetComponentInChildren<CheckController>().checkCtrl==true){
-					if(palas[i].GetComponentInChildren<CheckController>().moving==true){
-						
-						player.AddForce(new Vector2(30,0));
+				if(i!=3){
+					if(palas[i].GetComponentInChildren<CheckController>().checkCtrl==true){
+						if(palas[i].GetComponentInChildren<CheckController>().moving==true){
+							
+							player.AddForce(new Vector2(30,0));
+						}
 					}
-				}
-				else{
-					if(palas[i].GetComponentInChildren<CheckController>().moving==true){
-						player.AddForce(new Vector2(-30,0));
+					else{
+						if(palas[i].GetComponentInChildren<CheckController>().moving==true){
+							player.AddForce(new Vector2(-30,0));
+						}
 					}
 				}
 			}
@@ -136,10 +150,12 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag=="Water"||other.tag=="FallCollider"||other.tag=="Pincho"||other.tag=="FallPincho"||other.tag=="Enemy"){
 			die=true;
+			fallWater=false;
 			transform.position=respawnPoint;
 		}
-		if(other.tag=="MovePlatform"){
-			//respawnPoint=other.transform.position;
+		if(other.tag=="WaterFallCollider"){
+			fallWater=true;
+
 		}
 
 		if(other.tag=="CheckPoint"){

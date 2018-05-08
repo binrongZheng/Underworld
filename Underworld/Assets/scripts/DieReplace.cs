@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class DieReplace : MonoBehaviour {
 	public GameObject player;
-	private Vector3 iniPos;
-	private float dist;
+	Vector3 initPos;
+	float dist;
 	// Use this for initialization
 	void Start () {
-		iniPos=transform.position;
+		initPos=transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		dist=player.transform.position.x-transform.position.x;
-		if(dist>-10&&dist<10){
+		if(dist>-20&&dist<20){
 			if(player.GetComponent<PlayerController>().die){
-				print("hola");
-				transform.position=iniPos;
+				transform.position=initPos;
 			}
 		}
 	}

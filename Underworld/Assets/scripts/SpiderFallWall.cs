@@ -8,6 +8,7 @@ public class SpiderFallWall : MonoBehaviour {
 	private bool die;
 	private bool follow=false;
 	private float dist;
+	private float height; 
 	private Vector3 iniPos;
 
 	// Use this for initialization
@@ -23,7 +24,8 @@ public class SpiderFallWall : MonoBehaviour {
 		}
 		if(transform.position.y<-150) transform.position=new Vector3(transform.position.x,-150,0);
 		dist=transform.position.x-Player.transform.position.x;
-		if(dist<10){
+		height=transform.position.y-Player.transform.position.y;
+		if(dist<10&&dist>-10&&height<10&&height>-10){
 			follow=true;
 		}
 		if(follow){
@@ -41,6 +43,15 @@ public class SpiderFallWall : MonoBehaviour {
 			die=true;
 			transform.Translate(0,-3,0);
 			this.GetComponent<PolygonCollider2D>().enabled=false;
+		}
+		if(other.tag=="FallPincho"){
+			die=true;
+			transform.Translate(0,-3,0);
+			this.GetComponent<PolygonCollider2D>().enabled=false;
+		}
+		if(other.tag=="Player"){
+			transform.position=iniPos;
+			follow=false;
 		}
 	}
 }

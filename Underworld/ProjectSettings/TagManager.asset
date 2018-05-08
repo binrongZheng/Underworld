@@ -19,6 +19,7 @@ TagManager:
   - Interruptor
   - FallWall
   - Ascensor
+  - WaterFallCollider
   layers:
   - Default
   - TransparentFX

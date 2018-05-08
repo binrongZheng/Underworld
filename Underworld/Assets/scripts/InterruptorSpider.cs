@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InterruptorSpider : MonoBehaviour {
 	//public Transform pont;
+	public bool startLeft;
 	public Rigidbody2D[] controlObject;
 	public GameObject Spider;
 	public Transform player;
@@ -28,6 +29,14 @@ public class InterruptorSpider : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		for(int i=0;i<controlObject.Length;i++){
+			if(controlObject[i].position.y<-100){				
+				controlObject[i].position=new Vector3(controlObject[i].position.x,-100,0);
+				controlObject[i].velocity=Vector3.zero;
+				controlObject[i].angularVelocity=0;
+			}
+		}
+
 		if(player.GetComponent<PlayerController>().die){
 			for(int i=0;i<controlObject.Length;i++){
 				controlObject[i].position=ControlPos[i];
@@ -40,9 +49,17 @@ public class InterruptorSpider : MonoBehaviour {
 			}
 		}
 		for(int i=0;i<controlObject.Length;i++){
-			if (player.position.x>initControlPos)
-				passed=true;
-			
+			if(startLeft){
+				if (player.position.x<initControlPos)
+					passed=true;
+				
+			}
+			else {
+				if (player.position.x>initControlPos)
+					passed=true;
+				
+			}
+
 		}
 
 		if(fall&&!passed){

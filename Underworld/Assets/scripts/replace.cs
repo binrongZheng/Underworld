@@ -22,4 +22,5 @@ public class replace : MonoBehaviour {
 			transform.position=respawnPoint;
 		}
 	}
+
 }
