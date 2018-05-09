@@ -79,7 +79,8 @@ public class PlayerController : MonoBehaviour {
 
 	void Update(){
 		if(fallWater){
-			
+			player.velocity = new Vector2 (player.velocity.x,-0.1f);
+
 		}
 		if (die) {
 			transform.position=respawnPoint;
@@ -101,6 +102,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		if (grounded && Input.GetKeyDown (KeyCode.Space)||breakGrounded && Input.GetKeyDown (KeyCode.Space)) {
 			//anim.SetBool("Ground",false);
+			if(fallWater)	player.AddForce(new Vector2(0,jumpForce*4));
 			player.AddForce(new Vector2(0,jumpForce));
 		}
 		if (palaControl && Input.GetKeyDown (KeyCode.LeftControl)) {

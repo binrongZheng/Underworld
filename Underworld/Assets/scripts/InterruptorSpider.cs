@@ -50,8 +50,8 @@ public class InterruptorSpider : MonoBehaviour {
 		}
 		for(int i=0;i<controlObject.Length;i++){
 			if(startLeft){
-				if (player.position.x<initControlPos)
-					passed=true;
+				//if (player.position.x<initControlPos)
+				//	passed=true;
 				
 			}
 			else {
