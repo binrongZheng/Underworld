@@ -30,10 +30,10 @@ public class SpiderFallWall : MonoBehaviour {
 		}
 		if(follow){
 			if(dist>0){
-				transform.Translate(-velocity,0,0);
+				transform.Translate(-velocity*Time.deltaTime,0,0);
 			}
 			else{
-				transform.Translate(velocity,0,0);
+				transform.Translate(velocity*Time.deltaTime,0,0);
 			}
 
 		}

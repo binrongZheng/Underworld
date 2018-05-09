@@ -43,10 +43,10 @@ public class SpiderController : MonoBehaviour {
 		distance=Player.position.x-transform.position.x;
 		if(follow){
 			if(distance>0){
-				transform.Translate(velocity,0,0);
+				transform.Translate(velocity*Time.deltaTime,0,0);
 			}
 			else{
-				transform.Translate(-velocity,0,0);
+				transform.Translate(-velocity*Time.deltaTime,0,0);
 			}
 		}
 	}
