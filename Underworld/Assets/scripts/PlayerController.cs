@@ -1,9 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 //
 //
 public class PlayerController : MonoBehaviour {
+	public bool canControl=false;
+	public GameObject ship;
+	public GameObject waterCheckCollision;
+	public GameObject water;
+	public bool checkWaterPoint=false;	
+	public bool checkFinalPoint=false;	
 	public GameObject interruptorAscensor;
 	private Rigidbody2D player;
 	//private Animator anim;
@@ -37,6 +44,7 @@ public class PlayerController : MonoBehaviour {
 	public bool die=false;
 	private bool ladder=false;
 	private bool fallWater=false;
+	private float checkWaterHeight;
 	void Start () {
 		player = GetComponent<Rigidbody2D> ();
 
@@ -56,35 +64,43 @@ public class PlayerController : MonoBehaviour {
 
 
 		//anim.SetFloat ("Speed", Mathf.Abs (move));
-		if(ladder){
-			player.isKinematic=true;
-			float move =Input.GetAxis("Vertical");
-			player.velocity = new Vector2 (player.velocity.x,move*maxSpeed);
-		}
-		else{
-			player.isKinematic=false;
-		}
-		if (grounded||breakGrounded)
-			llisca = false;
-		if (!llisca) {
-			float move = Input.GetAxis ("Horizontal");
-			player.velocity = new Vector2 (move*maxSpeed,player.velocity.y);
+		if(canControl){
+			if(ladder){
+				player.isKinematic=true;
+				float move =Input.GetAxis("Vertical");
+				player.velocity = new Vector2 (player.velocity.x,move*maxSpeed);
+			}
+			else{
+				player.isKinematic=false;
+			}
+			if (grounded||breakGrounded)
+				llisca = false;
+			if (!llisca) {
+				float move = Input.GetAxis ("Horizontal");
+				player.velocity = new Vector2 (move*maxSpeed,player.velocity.y);
 
-			if (move > 0 && !facingRight)
-				Flip ();
-			else if (move < 0 && facingRight)
-				Flip ();
+				if (move > 0 && !facingRight)
+					Flip ();
+				else if (move < 0 && facingRight)
+					Flip ();
+			}
 		}
 	}
 
 	void Update(){
+		checkWaterHeight=waterCheckCollision.transform.position.y-ship.transform.position.y;
 		if(fallWater){
 			player.velocity = new Vector2 (player.velocity.x,-0.1f);
 
 		}
 		if (die) {
 			transform.position=respawnPoint;
+			ship.GetComponent<shipReplace>().restart=true;
+			if(checkWaterPoint){
+				water.GetComponent<waterRise>().rise=true;
+			}
 			die = false;
+
 		}
 		if (LliscaGrounded) {
 			
@@ -100,9 +116,9 @@ public class PlayerController : MonoBehaviour {
 			//player.velocity = new Vector2 (jumpForce,-0.75f);
 			//player.AddForce(new Vector2(jumpForce,0));
 		}
-		if (grounded && Input.GetKeyDown (KeyCode.Space)||breakGrounded && Input.GetKeyDown (KeyCode.Space)) {
+		if (canControl&& grounded && Input.GetKeyDown (KeyCode.Space)||breakGrounded && Input.GetKeyDown (KeyCode.Space)) {
 			//anim.SetBool("Ground",false);
-			if(fallWater)	player.AddForce(new Vector2(0,jumpForce*4));
+			//if(fallWater)	player.AddForce(new Vector2(0,jumpForce*1.1f));
 			player.AddForce(new Vector2(0,jumpForce));
 		}
 		if (palaControl && Input.GetKeyDown (KeyCode.LeftControl)) {
@@ -142,6 +158,9 @@ public class PlayerController : MonoBehaviour {
 				}
 			}
 		}
+		if(/*checkFinalPoint||*/!canControl){
+			player.transform.Translate(Vector3.right*Time.deltaTime*0.3f);
+		}
 	}
 	void Flip(){
 		facingRight = !facingRight;
@@ -157,11 +176,28 @@ public class PlayerController : MonoBehaviour {
 		}
 		if(other.tag=="WaterFallCollider"){
 			fallWater=true;
-
 		}
 
 		if(other.tag=="CheckPoint"){
+			canControl=true;
+			if(!checkWaterPoint)
 			respawnPoint=other.transform.position;
+		}
+
+		if(other.tag=="FinalPoint"){
+			respawnPoint=other.transform.position;
+			checkFinalPoint=true;
+
+		}
+		if(other.tag=="RestartPoint"){
+			SceneManager.LoadScene("level_1");
+		}
+		if(other.tag=="WaterCheckPoint"){
+			if(checkWaterHeight<1){
+				respawnPoint=other.transform.position;
+				waterCheckCollision.GetComponent<BoxCollider2D>().enabled=false;
+				checkWaterPoint=true;
+			}
 		}
 
 		if(other.tag=="Pala"){
@@ -185,6 +221,9 @@ public class PlayerController : MonoBehaviour {
 		}
 		if(other.tag=="Ladder"){
 			ladder=false;
+		}
+		if(other.tag=="WaterFallCollider"){
+			fallWater=false;
 		}
 	}
 }

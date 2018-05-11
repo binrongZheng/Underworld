@@ -18,5 +18,9 @@ public class activeWater : MonoBehaviour {
 		if(other.tag=="Player"||other.tag=="Box"){
 			water.GetComponent<waterRise>().rise=true;
 		}
+		if(other.tag=="FinalPoint"){
+			water.GetComponent<waterRise>().rise=false;
+		}
 	}
+
 }

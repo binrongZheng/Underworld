@@ -5,6 +5,7 @@ using UnityEngine;
 public class replace : MonoBehaviour {
 	public Vector3 respawnPoint;
 	public bool replacePoint;
+	public float restartHeight;
 	// Use this for initialization
 	void Start () {
 		respawnPoint=transform.position;
@@ -15,12 +16,18 @@ public class replace : MonoBehaviour {
 	void Update () {
 		if(replacePoint){
 			transform.position=respawnPoint;
+			replacePoint=false;
 		}
+
 	}
 	void OnTriggerEnter2D(Collider2D other){
 		if(other.tag=="FallCollider"){
 			transform.position=respawnPoint;
 		}
+		if(other.tag=="WaterCheckPoint"){
+			respawnPoint=new Vector3(other.transform.position.x,other.transform.position.y-1,0);
+		}
+
 	}
 
 }

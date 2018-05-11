@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class waterRise : MonoBehaviour {
 	public bool rise=false;
+	public bool checkWaterPoint;
+	public GameObject player;
+	public Transform checkPoint;
+	public Transform FinalCheckPoint;
 	public GameObject[] CloseFallDetect;
-	private Vector3 initPos;
+	public Vector3 initPos;
 	public float velocity;
 	// Use this for initialization
 	void Start () {
@@ -15,19 +19,26 @@ public class waterRise : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(rise){
-			transform.Translate(0,velocity*Time.deltaTime,0);
-			for(int i=0;i<CloseFallDetect.Length;i++){
-				CloseFallDetect [i].GetComponent<BoxCollider2D> ().enabled = false;
+		if(!player.GetComponent<PlayerController>().checkFinalPoint){
+			if(player.GetComponent<PlayerController>().checkWaterPoint){
+				initPos=new Vector3(checkPoint.position.x,checkPoint.position.y-2,0);
 			}
 		}
 		else{
-			transform.position=initPos;
+			initPos=new Vector3(FinalCheckPoint.position.x,FinalCheckPoint.position.y-2,0);
 		}
-	}
-	void OnTriggerEnter2D(Collider2D other){
-		if (other.tag == "Interruptor") {
-			//velocity = 0.01f;
+		if(transform.position.y<FinalCheckPoint.position.y+5){
+			if(rise){
+				transform.Translate(0,velocity*Time.deltaTime,0);
+					for(int i=0;i<CloseFallDetect.Length;i++){
+						if(CloseFallDetect [i].GetComponent<BoxCollider2D> ().enabled){
+							CloseFallDetect [i].GetComponent<BoxCollider2D> ().enabled = false;
+						}
+					}
+			}
+			else{
+				transform.position=initPos;
+			}
 		}
 	}
 }

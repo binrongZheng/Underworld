@@ -20,6 +20,9 @@ TagManager:
   - FallWall
   - Ascensor
   - WaterFallCollider
+  - WaterCheckPoint
+  - FinalPoint
+  - RestartPoint
   layers:
   - Default
   - TransparentFX
